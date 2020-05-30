@@ -1,22 +1,22 @@
 import React from 'react';
-import './TodoItemDisplay.css'
+import './TodoItemDisplay.css';
+import TodoItemDelete from '../todoItemDelete/TodoItemDelete';
 
 function TodoItemDisplay(props) {
 
-
-    let showDescription = true;
-
-    const {name, description, complete} = props.todo;
-
-    if(complete) {
-        return null;
-    } 
+    const {name, description} = props.todo;
 
     return (
         <div className='todo_item_display'>
-            <span className='has-text-primary'>{name}</span>
-            {showDescription ? description : null}
-            <img src='#' />
+            <div className='todo-item-content'>
+                <div className='todo-name'>
+                    <span>{name}</span>
+                </div>
+                <div className='todo-description'>
+                    <span>{description}</span>
+                </div>
+            </div>
+            <TodoItemDelete id={props.todo.id} />
         </div>
     );
 }

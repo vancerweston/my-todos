@@ -1,0 +1,18 @@
+.todo-item-create {
+    border: 1px solid black;
+    border-radius: 0 0 15px 15px;
+    padding: 10px;
+    text-align: center;
+}
+
+.todo-item-input {
+    width: 300px;
+    height: 30px;
+    margin-bottom: 10px;
+}
+
+.todo-item-button {
+    width: 250px;
+    height: 30px;
+    border-radius: 15px;
+}

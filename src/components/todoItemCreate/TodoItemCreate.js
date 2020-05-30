@@ -1,7 +1,11 @@
 import React from 'react';
 import PubSub from 'pubsub-js';
+import './TodoItemCreate.css'
 import {TODO_ITEM_CREATED} from '../../lib/subscriptions';
 import {API_BASE_URL} from '../../lib/config';
+import axios from 'axios';
+
+axios.defaults.baseURL = API_BASE_URL;
 
 
 class TodoItemCreate extends React.Component {
@@ -63,31 +67,19 @@ class TodoItemCreate extends React.Component {
     submitHandler(e) {
         console.log('Hey you clicked me.', this.state);
 
-        fetch(API_BASE_URL + 'todos/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(this.state)
-        })
+        axios.post('todos/', this.state)
             .then((res) => {
-                res.json()
-                    .then((json_body) => {
-                        PubSub.publish(TODO_ITEM_CREATED, json_body);
+                PubSub.publish(TODO_ITEM_CREATED, res.data);
 
-                        this.nameInput.current.value = null;
-                        this.descriptionInput.current.value = null;
-                
-                        this.setState({
-                            name: null,
-                            description: null
-                        });
+                this.nameInput.current.value = null;
+                this.descriptionInput.current.value = null;
+        
+                this.setState({
+                    name: null,
+                    description: null
+                });
 
-                        this.props.refreshToDo();
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    });
+                this.props.refreshToDo();
             })
             .catch((err) => {
             console.log(err);
@@ -97,9 +89,15 @@ class TodoItemCreate extends React.Component {
     render() {
         return (
             <div className='todo-item-create'>
-                <div><input type='text' ref={this.nameInput} defaultValue={null} placeholder='Create Your Todo Name' /></div>
-                <div><input type='text' ref={this.descriptionInput} defaultValue={null} placeholder='Create Your Todo Description' /></div>
-                <button ref={this.submitButton}>Submit</button>
+                <div>
+                    <input className='todo-item-input' type='text' ref={this.nameInput} defaultValue={null} placeholder='Create Your Todo Name' />
+                </div>
+                <div>
+                    <input className='todo-item-input' type='text' ref={this.descriptionInput} defaultValue={null} placeholder='Create Your Todo Description' />
+                </div>
+                <div>
+                    <button className='todo-item-button' ref={this.submitButton}>Create Todo</button>
+                </div>
             </div>
         );
     }

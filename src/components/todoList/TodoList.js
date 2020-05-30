@@ -7,7 +7,10 @@ function TodoList(props) {
     const todoComponents = props.todos.map(todo => <TodoItemDisplay key={todo._id} todo={todo}/>)
     
     return (
-        <div className='todo-list'>
+        <div className='todo-list-housing'>
+            <div className='todo-header'>
+                <h1>My ToDo's</h1>
+            </div>
             {todoComponents}
         </div>
     )

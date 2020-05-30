@@ -1,3 +1,18 @@
-.todo-item-display {
+.todo_item_display {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 5px;
+}
+
+.todo-name {
+    font-size: 110%;
+    margin-left: 10px;
+    color: blue;
+    font-weight: 600;
+}
+
+.todo-description {
+    text-indent: 35px;
+    color: grey;
 }

@@ -2,12 +2,15 @@ import React from 'react';
 import '../node_modules/bulma/css/bulma.css'
 import './App.css';
 import PubSub from 'pubsub-js';
-import {TODO_ITEM_CREATED} from './lib/subscriptions';
+import {TODO_ITEM_CREATED, TODO_ITEM_DELETED} from './lib/subscriptions';
 import {API_BASE_URL} from './lib/config';
+import axios from 'axios';
 
 //NOTE: Importing local application components
 import TodoList from './components/todoList/TodoList'
 import TodoItemCreate from './components/todoItemCreate/TodoItemCreate'
+
+axios.defaults.baseURL = API_BASE_URL;
 
 class App extends React.Component {
   constructor(props) {
@@ -20,7 +23,9 @@ class App extends React.Component {
     this.getTodoList = this.getTodoList.bind(this);
 
     this.todoItemCreatedHandler = this.todoItemCreatedHandler.bind(this);
+    this.todoItemDeletedHandler = this.todoItemDeletedHandler.bind(this);
     PubSub.subscribe(TODO_ITEM_CREATED, this.todoItemCreatedHandler);
+    PubSub.subscribe(TODO_ITEM_DELETED, this.todoItemDeletedHandler)
   }
 
   componentDidMount() {
@@ -28,29 +33,24 @@ class App extends React.Component {
   }
   
   getTodoList() {
-    fetch(API_BASE_URL + 'todos/')
+    axios.get('todos/')
       .then((res) => {
-        res.json()
-          .then((json_body) => {
-            this.setState({
-              todo_items: json_body
-            });    
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+        this.setState({
+          todo_items: res.data
+        }); 
       })
       .catch((err) => {
         console.log(err);
       });
   }
+
   // Notification Handlers
-  todoItemCreatedHandler(msg, data) {
-    console.log(data);
-    this.state.todo_items.push(data);
-    this.setState({
-      todo_items: this.state.todo_items
-    })
+  todoItemCreatedHandler() {
+    this.getTodoList();
+  }
+  
+  todoItemDeletedHandler() {
+    this.getTodoList();
   }
 
   render() {
